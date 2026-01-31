@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+input {
+	background-color: white;
+	padding: 5px;
+	border-radius: 10px;
+	width: 100%;
+}
+
+input::placeholder {
+	padding-left: 5px;
+}

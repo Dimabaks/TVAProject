@@ -13,8 +13,12 @@ const router = createBrowserRouter([
 		element: <DashboardLayout />,
 		children: [
 			{ index: true, element: <Companies /> },
-			{ path: "/companies", element: <Companies /> },
-			{ path: "/tasks", element: <Tasks /> },
+			{
+				path: "/companies",
+				element: <Companies />,
+				handle: { title: "Companies" },
+			},
+			{ path: "/tasks", element: <Tasks />, handle: { title: "Tasks" } },
 		],
 	},
 ]);

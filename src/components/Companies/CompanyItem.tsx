@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Company } from "../../types/Company.types";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import DriversList from "../Drivers/DriversList";
 
 type Props = {
 	company: Company;
@@ -14,7 +15,7 @@ export default function CompanyItem({ company }: Props) {
 			<button
 				type="button"
 				onClick={() => setOpen((p) => !p)}
-				className="w-full text-left cursor-pointer hover:bg-green-200 flex items-center px-4 py-3">
+				className={`w-full text-left cursor-pointer hover:bg-green-200 flex items-center px-4 py-3 ${open ? "bg-green-200" : "bg-white"}`}>
 				<div className="grid grid-cols-4 gap-x-5 flex-1 items-center">
 					<span className="font-medium">{company.name}</span>
 					<span className="text-sm text-gray-500">{company.dotNumber}</span>
@@ -27,7 +28,11 @@ export default function CompanyItem({ company }: Props) {
 				/>
 			</button>
 
-			{open && <div className="px-4 py-3  bg-gray-50 text-sm"></div>}
+			{open && (
+				<div className="px-4 py-3  bg-white text-sm">
+					<DriversList drivers={company.drivers} />
+				</div>
+			)}
 		</div>
 	);
 }

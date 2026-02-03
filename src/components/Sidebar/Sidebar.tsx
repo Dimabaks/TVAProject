@@ -12,7 +12,7 @@ export default function Sidebar() {
 
 	return (
 		<div
-			className={`flex flex-col min-h-screen bg-white border-gray-300 border-r-1 transition-all duration-300 ${collapsed ? "w-15" : "min-w-3xs"}`}>
+			className={`flex flex-col min-h-screen bg-white border-gray-300 border-r-1 transition-all duration-300 ${collapsed ? "w-15" : "min-w-50"}`}>
 			<div className="flex justify-between relative border-gray-300 border-b-1 pt-3 pb-3 pl-5 h-14">
 				<span
 					className={`font-bold transition-all duration-300 ${

@@ -8,7 +8,7 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 
 export default function Companies() {
 	return (
-		<div className="p-5 space-y-3">
+		<div className="p-2 space-y-3">
 			<div className="flex items-center px-4 py-2 ">
 				<div className="grid grid-cols-4 flex-1 items-center text-gray-600">
 					<span className="flex items-center">

@@ -20,7 +20,12 @@ export default function CompanyItem({ company }: Props) {
 					<span className="font-medium">{company.name}</span>
 					<span className="text-sm text-gray-500">{company.dotNumber}</span>
 					<span>{company.id}</span>
-					<span>{company.status}</span>
+					<span>
+						<span
+							className={`${company.status === "Active" ? "bg-green-400" : "bg-red-300"} px-4 py-2 rounded-2xl text-sm`}>
+							{company.status}
+						</span>
+					</span>
 				</div>
 
 				<KeyboardArrowDownIcon

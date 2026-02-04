@@ -3,6 +3,7 @@ import Login from "./pages/Login/Login";
 import DashboardLayout from "./layout/DashboardLayout";
 import Companies from "./pages/Companies/Companies";
 import Tasks from "./pages/Tasks/Tasks";
+import { DriverDetails } from "./components/Drivers/DriverDetails";
 
 const router = createBrowserRouter([
 	{
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
 				handle: { title: "Companies" },
 			},
 			{ path: "/tasks", element: <Tasks />, handle: { title: "Tasks" } },
+			{ path: "drivers/:driverId", element: <DriverDetails /> },
 		],
 	},
 ]);

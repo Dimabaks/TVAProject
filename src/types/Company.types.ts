@@ -8,4 +8,4 @@ export type Company = {
 	drivers: Driver[];
 };
 
-export type CompanyStatus = "active" | "inactive";
+export type CompanyStatus = "Active" | "Inactive";

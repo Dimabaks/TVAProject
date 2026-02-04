@@ -6,9 +6,11 @@ import AddTaskIcon from "@mui/icons-material/AddTask";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
 import SidebarNavItem from "./SidebarNavItem";
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar() {
 	const [collapsed, setCollapsed] = useState(false);
+	const navigate = useNavigate();
 
 	return (
 		<div
@@ -24,7 +26,7 @@ export default function Sidebar() {
 					className="absolute right-0 cursor-pointer top-4"
 					onClick={() => setCollapsed((prev) => !prev)}>
 					{collapsed ?
-						<ArrowForwardIosIcon />
+						<ArrowForwardIosIcon fontSize="small" className="pl-2" />
 					:	<ArrowBackIosIcon />}
 				</button>
 			</div>
@@ -43,7 +45,7 @@ export default function Sidebar() {
 				/>
 
 				<div className="mt-auto pb-10 ">
-					<Button>
+					<Button onClick={() => navigate("/login")}>
 						<LogoutIcon />
 						{!collapsed && <span>Logout</span>}
 					</Button>

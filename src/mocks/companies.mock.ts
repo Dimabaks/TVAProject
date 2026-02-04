@@ -1,10 +1,11 @@
 import type { Company } from "../types/Company.types";
+import { generateMockTimeline, generateMockTimeline2 } from "./timeline.mock";
 
 export const companiesMock: Company[] = [
 	{
 		id: "1",
 		name: "Trans Auto SRL",
-		status: "active",
+		status: "Active",
 		dotNumber: "2231131",
 		drivers: [
 			{
@@ -15,6 +16,7 @@ export const companiesMock: Company[] = [
 				lastLocation: "Chicago, IL",
 				lastUpdate: "10 min ago",
 				connection: "connected",
+				timeline: generateMockTimeline(),
 			},
 			{
 				id: "d2",
@@ -24,6 +26,7 @@ export const companiesMock: Company[] = [
 				lastLocation: "I-90, NY",
 				lastUpdate: "2 min ago",
 				connection: "disconnected",
+				timeline: generateMockTimeline2(),
 			},
 		],
 	},
@@ -31,7 +34,7 @@ export const companiesMock: Company[] = [
 		id: "2",
 		name: "Logistics Pro",
 		dotNumber: "998877",
-		status: "inactive",
+		status: "Inactive",
 		drivers: [],
 	},
 ];

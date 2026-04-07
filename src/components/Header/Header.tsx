@@ -11,7 +11,7 @@ export default function Header() {
 		matches
 			.slice()
 			.reverse()
-			.find((match) => match.handle?.title)?.handle.title ?? "";
+			.find((match) => match.handle?.title)?.handle.title ?? "Companies";
 	return (
 		<div className="h-14 border-gray-300 border-b-1 w-full flex items-center font-semibold px-5 text-xl">
 			{currentTitle}

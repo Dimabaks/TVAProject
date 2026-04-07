@@ -25,7 +25,7 @@ export default function Login() {
 		navigate("/companies");
 	};
 	return (
-		<div className="min-h-screen flex bg-amber-300">
+		<div className="min-h-screen flex ">
 			<form
 				action=""
 				onSubmit={handleSubmit(onSubmit)}

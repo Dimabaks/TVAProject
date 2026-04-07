@@ -11,6 +11,7 @@ export const companiesMock: Company[] = [
 			{
 				id: "d1",
 				name: "Andrei Tretiakov",
+
 				vehicle: "TX-1023",
 				status: "off duty",
 				lastLocation: "Chicago, IL",
@@ -21,6 +22,7 @@ export const companiesMock: Company[] = [
 			{
 				id: "d2",
 				name: "Artur Pogonet",
+
 				vehicle: "TX-2044",
 				status: "driving",
 				lastLocation: "I-90, NY",

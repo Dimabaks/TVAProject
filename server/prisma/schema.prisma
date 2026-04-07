@@ -1,0 +1,28 @@
+datasource db {
+  provider = "sqlite"
+}
+
+
+model Company {
+  id      String   @id @default(uuid())
+  name    String
+  drivers Driver[]
+}
+
+model Driver {
+  id        String        @id @default(uuid())
+  name      String
+  companyId String
+  company   Company       @relation(fields: [companyId], references: [id])
+  timeline  LogTimeline[]
+}
+
+model LogTimeline {
+  id       String @id @default(uuid())
+  status   String
+  start    DateTime
+  end      DateTime
+
+  driverId String
+  driver   Driver @relation(fields: [driverId], references: [id])
+}

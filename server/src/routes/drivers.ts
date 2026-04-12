@@ -1,0 +1,91 @@
+import { Router } from "express";
+import Driver from "../models/Driver";
+import Timeline from "../models/Timeline";
+
+const router = Router();
+
+// GET /api/drivers - получить всех водителей с timeline
+router.get("/", async (req, res) => {
+	try {
+		const drivers = await Driver.findAll({
+			include: [{ model: Timeline, as: "timeline" }],
+		});
+		res.json(drivers);
+	} catch (err: unknown) {
+		res.status(500).json({ error: "Ошибка получения водителей" });
+	}
+});
+
+// POST /api/drivers - создать водителя
+router.post("/", async (req, res) => {
+	try {
+		const {
+			name,
+			vehicle,
+			status,
+			lastLocation,
+			lastUpdate,
+			connection,
+			companyId,
+		} = req.body;
+		const driver = await Driver.create({
+			name,
+			vehicle,
+			status,
+			lastLocation,
+			lastUpdate,
+			connection,
+			companyId,
+		});
+		res.status(201).json(driver);
+	} catch (err: unknown) {
+		res.status(500).json({ error: "Ошибка создания водителя" });
+	}
+});
+
+// PUT /api/drivers/:id - обновить водителя
+router.put("/:id", async (req, res) => {
+	try {
+		const { id } = req.params;
+		const {
+			name,
+			vehicle,
+			status,
+			lastLocation,
+			lastUpdate,
+			connection,
+			companyId,
+		} = req.body;
+		await Driver.update(
+			{
+				name,
+				vehicle,
+				status,
+				lastLocation,
+				lastUpdate,
+				connection,
+				companyId,
+			},
+			{ where: { id } },
+		);
+		const updated = await Driver.findByPk(id, {
+			include: [{ model: Timeline, as: "timeline" }],
+		});
+		res.json(updated);
+	} catch (err: unknown) {
+		res.status(500).json({ error: "Ошибка обновления водителя" });
+	}
+});
+
+// DELETE /api/drivers/:id - удалить водителя
+router.delete("/:id", async (req, res) => {
+	try {
+		const { id } = req.params;
+		await Driver.destroy({ where: { id } });
+		res.json({ message: "Водитель удалён" });
+	} catch (err: unknown) {
+		res.status(500).json({ error: "Ошибка удаления водителя" });
+	}
+});
+
+export default router;

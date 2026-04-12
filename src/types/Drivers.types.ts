@@ -1,7 +1,7 @@
 import type { LogStatus, LogTimeline } from "./Log.types";
 
 export type Driver = {
-	id: string;
+	id: number;
 	name: string;
 	vehicle: string;
 	status: LogStatus;

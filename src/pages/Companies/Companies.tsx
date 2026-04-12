@@ -1,12 +1,36 @@
-import { KeyboardArrowDown } from "@mui/icons-material";
 import CompanyItem from "../../components/Companies/CompanyItem";
-import { companiesMock } from "../../mocks/companies.mock";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import Grid3x3Icon from "@mui/icons-material/Grid3x3";
 import BadgeIcon from "@mui/icons-material/Badge";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
+import { useEffect, useState } from "react";
+import type { Company } from "../../types/Company.types";
+import { getCompanies } from "../../api/companies";
+import AddCompanyModal from "../../components/Modals/AddCompanyModal";
 
 export default function Companies() {
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+	const [companies, setCompanies] = useState<Company[]>([]);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [refresh, setRefresh] = useState(0);
+
+	useEffect(() => {
+		async function fecthCompanies() {
+			try {
+				const res = await getCompanies();
+				setCompanies(res.data);
+				setLoading(false);
+			} catch {
+				setError("Companies loading error");
+				setLoading(false);
+			}
+		}
+		fecthCompanies();
+	}, [refresh]);
+
+	if (loading) return <div>Loading...</div>;
+	if (error) return <div>Error</div>;
 	return (
 		<div className="p-2 space-y-3">
 			<div className="flex items-center px-4 py-2 ">
@@ -28,13 +52,22 @@ export default function Companies() {
 						Status
 					</span>
 				</div>
-
-				<KeyboardArrowDown />
+				<button
+					className="cursor-pointer border-gray-200 border-2 px-3 py-2 rounded-2xl text-gray-600 hover:bg-gray-200"
+					onClick={() => setIsModalOpen(true)}>
+					Add Company
+				</button>
 			</div>
 
-			{companiesMock.map((company) => (
+			{companies.map((company) => (
 				<CompanyItem key={company.id} company={company} />
 			))}
+
+			<AddCompanyModal
+				open={isModalOpen}
+				onClose={() => setIsModalOpen(false)}
+				onSuccess={() => setRefresh((r) => r + 1)}
+			/>
 		</div>
 	);
 }

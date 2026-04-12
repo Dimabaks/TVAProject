@@ -1,7 +1,7 @@
 import type { Driver } from "./Drivers.types";
 
 export type Company = {
-	id: string;
+	id: number;
 	name: string;
 	status: CompanyStatus;
 	dotNumber: string;

@@ -43,6 +43,12 @@ export default function DriversList({ drivers }: { drivers: Driver[] }) {
 						<th className="px-2 py-3">Drive</th>
 						<th className="px-2 py-3">Shift</th>
 						<th className="px-2 py-3">Cycle</th>
+
+						<th>
+							<button className="cursor-pointer border-gray-300 border-2 px-3 py-2 rounded-2xl text-gray-600 hover:bg-gray-200">
+								Add Driver
+							</button>
+						</th>
 					</tr>
 				</thead>
 

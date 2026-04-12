@@ -16,7 +16,7 @@ export function percent(used: number, limit: number): number {
 }
 
 export function sumMinutesByStatus(
-	timeline: LogTimeline[],
+	timeline: LogTimeline[] = [],
 	status: LogStatus,
 ): number {
 	return timeline.reduce((acc, logSegment) => {

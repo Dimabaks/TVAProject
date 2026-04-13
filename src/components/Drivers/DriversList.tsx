@@ -8,8 +8,20 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import WifiIcon from "@mui/icons-material/Wifi";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import { useState } from "react";
+import AddDriverModal from "../Modals/AddDriverModal";
 
-export default function DriversList({ drivers }: { drivers: Driver[] }) {
+export default function DriversList({
+	drivers,
+	companyId,
+	onRefresh,
+}: {
+	drivers: Driver[];
+	companyId: number;
+	onRefresh: () => void;
+}) {
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
 	return (
 		<div className="overflow-x-auto">
 			<table className="w-full border-collapse">
@@ -45,7 +57,9 @@ export default function DriversList({ drivers }: { drivers: Driver[] }) {
 						<th className="px-2 py-3">Cycle</th>
 
 						<th>
-							<button className="cursor-pointer border-gray-300 border-2 px-3 py-2 rounded-2xl text-gray-600 hover:bg-gray-200">
+							<button
+								className="cursor-pointer border-gray-300 border-2 px-3 py-2 rounded-2xl text-gray-600 hover:bg-gray-200"
+								onClick={() => setIsModalOpen(true)}>
 								Add Driver
 							</button>
 						</th>
@@ -58,6 +72,15 @@ export default function DriversList({ drivers }: { drivers: Driver[] }) {
 					))}
 				</tbody>
 			</table>
+			<AddDriverModal
+				open={isModalOpen}
+				onClose={() => setIsModalOpen(false)}
+				onSuccess={() => {
+					onRefresh();
+					setIsModalOpen(false);
+				}}
+				companyId={companyId}
+			/>
 		</div>
 	);
 }

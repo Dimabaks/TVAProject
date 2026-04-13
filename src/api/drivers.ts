@@ -1,12 +1,14 @@
 import api from "./api";
+import { LogStatus } from "../types/Log.types";
+import { ConnectionStatus } from "../types/Drivers.types";
 
 export type CreateDriverData = {
 	name: string;
 	vehicle: string;
-	status: string;
-	lastLocation: string;
-	lastUpdate: string;
-	connection: string;
+	status: LogStatus;
+	lastLocation?: string;
+	lastUpdate?: string;
+	connection: ConnectionStatus;
 	companyId: number;
 };
 

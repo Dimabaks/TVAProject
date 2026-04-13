@@ -34,7 +34,7 @@ export default function Companies() {
 	return (
 		<div className="p-2 space-y-3">
 			<div className="flex items-center px-4 py-2 ">
-				<div className="grid grid-cols-4 flex-1 items-center text-gray-600">
+				<div className="grid grid-cols-4 flex-1 items-start mr-10 text-gray-600">
 					<span className="flex items-center">
 						<AccountBalanceIcon fontSize="small" className="mr-1" />
 						Company Name
@@ -51,16 +51,21 @@ export default function Companies() {
 						<AutorenewIcon fontSize="small" className="mr-1" />
 						Status
 					</span>
+					<span></span>
 				</div>
 				<button
-					className="cursor-pointer border-gray-200 border-2 px-3 py-2 rounded-2xl text-gray-600 hover:bg-gray-200"
+					className="absolute right-7 cursor-pointer border-gray-200 border-2 px-3 py-2 rounded-2xl text-gray-600 hover:bg-gray-200 "
 					onClick={() => setIsModalOpen(true)}>
 					Add Company
 				</button>
 			</div>
 
 			{companies.map((company) => (
-				<CompanyItem key={company.id} company={company} />
+				<CompanyItem
+					key={company.id}
+					company={company}
+					onRefresh={() => setRefresh((r) => r + 1)}
+				/>
 			))}
 
 			<AddCompanyModal

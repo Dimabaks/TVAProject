@@ -9,6 +9,7 @@ export type Driver = {
 	lastUpdate: string;
 	connection: ConnectionStatus;
 	timeline: LogTimeline[];
+	companyId: number;
 };
 
 export type ConnectionStatus = "connected" | "disconnected";

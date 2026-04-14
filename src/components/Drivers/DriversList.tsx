@@ -68,7 +68,7 @@ export default function DriversList({
 
 				<tbody>
 					{drivers.map((driver) => (
-						<DriverRow key={driver.id} driver={driver} />
+						<DriverRow key={driver.id} driver={driver} onRefresh={onRefresh} />
 					))}
 				</tbody>
 			</table>

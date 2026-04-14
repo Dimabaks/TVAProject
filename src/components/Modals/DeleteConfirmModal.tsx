@@ -1,3 +1,5 @@
+import { createPortal } from "react-dom";
+
 type Props = {
 	open: boolean;
 	onClose: () => void;
@@ -12,7 +14,8 @@ export default function DeleteConfirmModal({
 	message,
 }: Props) {
 	if (!open) return null;
-	return (
+
+	return createPortal(
 		<div className="fixed inset-0 bg-black/50 flex items-center justify-center">
 			<div className="bg-white rounded-lg p-6 w-96">
 				<h1>{message}</h1>
@@ -31,6 +34,7 @@ export default function DeleteConfirmModal({
 					</button>
 				</div>
 			</div>
-		</div>
+		</div>,
+		document.body,
 	);
 }

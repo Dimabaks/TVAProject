@@ -29,11 +29,18 @@ export default function AddDriverModal({
 				connection: connection,
 				companyId: companyId,
 			});
+			resetForm();
 			onSuccess();
 			onClose();
 		} catch {
 			alert("Add Driver error!");
 		}
+	}
+
+	function resetForm() {
+		setName("");
+		setVehicle("");
+		setConnection("connected");
 	}
 
 	if (!open) return null;
@@ -77,7 +84,10 @@ export default function AddDriverModal({
 						<button
 							className="cursor-pointer px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100"
 							type="button"
-							onClick={onClose}>
+							onClick={() => {
+								resetForm();
+								onClose();
+							}}>
 							Cancel
 						</button>
 						<button

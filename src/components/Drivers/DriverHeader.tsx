@@ -1,4 +1,3 @@
-import type { Company } from "../../types/Company.types";
 import type { Driver } from "../../types/Drivers.types";
 import type { buildHosSummary } from "../../utils/hos";
 import LinearStatus from "../LinearStatus";
@@ -9,11 +8,9 @@ type HosSummary = ReturnType<typeof buildHosSummary>;
 
 export default function DriverHeader({
 	driver,
-	company,
 	hos,
 }: {
 	driver: Driver;
-	company: Company;
 	hos: HosSummary;
 }) {
 	return (
@@ -25,7 +22,7 @@ export default function DriverHeader({
 				</span>
 				<span className="border border-green-300 bg-green-200 rounded-2xl px-3 flex items-center gap-1">
 					<BusinessIcon fontSize="small" />
-					{company.name}
+					{driver.company?.name}
 				</span>
 			</div>
 

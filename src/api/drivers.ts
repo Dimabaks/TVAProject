@@ -18,3 +18,4 @@ export const createDriver = (data: CreateDriverData) =>
 export const updateDriver = (id: number, data: CreateDriverData) =>
 	api.put(`/drivers/${id}`, data);
 export const deleteDriver = (id: number) => api.delete(`/drivers/${id}`);
+export const getDriverById = (id: number) => api.get(`/drivers/${id}`);

@@ -8,8 +8,14 @@ export type Driver = {
 	lastLocation: string;
 	lastUpdate: string;
 	connection: ConnectionStatus;
-	timeline: LogTimeline[];
+	timeline?: LogTimeline[];
 	companyId: number;
+	company?: {
+		id: number;
+		name: string;
+		dotNumber: string;
+		status: string;
+	};
 };
 
 export type ConnectionStatus = "connected" | "disconnected";

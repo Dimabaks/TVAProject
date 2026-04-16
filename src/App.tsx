@@ -4,6 +4,7 @@ import DashboardLayout from "./layout/DashboardLayout";
 import Companies from "./pages/Companies/Companies";
 import Tasks from "./pages/Tasks/Tasks";
 import { DriverDetails } from "./pages/Drivers/DriverDetails";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
 	{
@@ -11,7 +12,11 @@ const router = createBrowserRouter([
 		element: <Login />,
 	},
 	{
-		element: <DashboardLayout />,
+		element: (
+			<ProtectedRoute>
+				<DashboardLayout />
+			</ProtectedRoute>
+		),
 		children: [
 			{ index: true, element: <Companies /> },
 			{

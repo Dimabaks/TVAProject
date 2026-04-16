@@ -1,6 +1,7 @@
 import { Router } from "express";
 import Driver from "../models/Driver";
 import Timeline from "../models/Timeline";
+import Company from "../models/Company";
 
 const router = Router();
 
@@ -13,6 +14,25 @@ router.get("/", async (req, res) => {
 		res.json(drivers);
 	} catch (err: unknown) {
 		res.status(500).json({ error: "Ошибка получения водителей" });
+	}
+});
+
+// GET - получить водителя по id
+router.get("/:id", async (req, res) => {
+	try {
+		const { id } = req.params;
+		const driver = await Driver.findByPk(id, {
+			include: [
+				{ model: Timeline, as: "timeline" },
+				{ model: Company, as: "company" },
+			],
+		});
+		if (!driver) {
+			return res.status(404).json({ error: "Driver not found" });
+		}
+		res.json(driver);
+	} catch {
+		res.status(500).json({ error: "Error driver loading" });
 	}
 });
 

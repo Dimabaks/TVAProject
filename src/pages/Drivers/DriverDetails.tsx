@@ -11,7 +11,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import { type LogTimeline } from "../../types/Log.types";
 import EditModal from "../../components/Modals/EditModal";
 import { Driver } from "../../types/Drivers.types";
-import { getDriverById } from "../../api/drivers";
+import { deleteTimeline, getDriverById } from "../../api/drivers";
 
 export function DriverDetails() {
 	const { driverId } = useParams<{ driverId: string }>();
@@ -21,13 +21,21 @@ export function DriverDetails() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [timeline, setTimeline] = useState<LogTimeline[]>([]);
+	const [refresh, setRefresh] = useState(0);
 
 	useEffect(() => {
 		async function fetchDriver() {
 			try {
 				const res = await getDriverById(Number(driverId));
-				setDriver(res.data);
-				setTimeline(res.data.timeline ?? []);
+				const data = res.data;
+				data.timeline = data.timeline?.map((seg: LogTimeline) => ({
+					...seg,
+					start: Number(seg.start),
+					end: seg.end === null ? Date.now() : Number(seg.end),
+				}));
+				setDriver(data);
+				setTimeline(data.timeline ?? []);
+				console.log("timeline:", data.timeline);
 				setLoading(false);
 			} catch {
 				setError("Driver not found");
@@ -35,19 +43,19 @@ export function DriverDetails() {
 			}
 		}
 		fetchDriver();
-	}, [driverId]);
+	}, [driverId, refresh]);
 
 	const currentDate = selectedDate.toLocaleDateString();
 
-	const [selectedIds, setSelectedIds] = useState<string[]>([]);
+	const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
-	const [editId, setEditId] = useState<string | null>(null);
+	const [editId, setEditId] = useState<number | null>(null);
 
 	const editingSeg = timeline.find((seg) => seg.id === editId);
 
 	const hos = buildHosSummary(timeline);
 
-	function toggleSelected(id: string) {
+	function toggleSelected(id: number) {
 		if (selectedIds.includes(id)) {
 			setSelectedIds(selectedIds.filter((item) => item !== id));
 		} else {
@@ -60,9 +68,11 @@ export function DriverDetails() {
 		clearSelected();
 	}
 
-	function deleteOne(id: string) {
+	async function deleteOne(id: number) {
+		await deleteTimeline(id);
 		setTimeline((prev) => prev.filter((seg) => seg.id !== id));
 		setSelectedIds((prev) => prev.filter((seg) => seg !== id));
+		setRefresh((r) => r + 1);
 	}
 
 	function clearSelected() {
@@ -78,7 +88,7 @@ export function DriverDetails() {
 		});
 	}
 
-	function openEdit(id: string) {
+	function openEdit(id: number) {
 		setEditId(id);
 	}
 
@@ -120,28 +130,30 @@ export function DriverDetails() {
 		<div className="flex flex-col">
 			<DriverHeader driver={driver} hos={hos} />
 
-			<div className="inline-flex w-fit gap-3 border border-green-300 p-2 rounded-2xl ml-10 items-center text-lime-900 mt-7">
+			<div className="flex items-center gap-1 ml-6 mt-5 w-fit border border-gray-100 rounded-lg bg-white overflow-hidden">
 				<button
 					type="button"
-					className="px-3 py-1 cursor-pointer"
+					className="px-3 py-2 text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
 					onClick={() =>
 						setSelectedDate((d) => new Date(d.getTime() - 24 * 60 * 60 * 1000))
 					}>
-					<ArrowBackIosIcon />
+					<ArrowBackIosIcon sx={{ fontSize: 12 }} />
 				</button>
 
-				<span className="flex gap-2 items-center ">
-					<CalendarMonthIcon fontSize="small" />
-					{currentDate}
-				</span>
+				<div className="flex items-center gap-2 px-3 py-2 border-x border-gray-100">
+					<CalendarMonthIcon sx={{ fontSize: 14 }} className="text-gray-400" />
+					<span className="text-sm font-medium text-gray-700">
+						{currentDate}
+					</span>
+				</div>
 
 				<button
 					type="button"
-					className="px-3 py-1 cursor-pointer"
+					className="px-3 py-2 text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
 					onClick={() =>
 						setSelectedDate((d) => new Date(d.getTime() + 24 * 60 * 60 * 1000))
 					}>
-					<ArrowForwardIosIcon />
+					<ArrowForwardIosIcon sx={{ fontSize: 12 }} />
 				</button>
 			</div>
 
@@ -158,6 +170,7 @@ export function DriverDetails() {
 					selectedIds={selectedIds}
 					onDeleteOne={deleteOne}
 					onOpenModal={openEdit}
+					date={selectedDate}
 				/>
 			</div>
 

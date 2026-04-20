@@ -1,6 +1,7 @@
 import { Router } from "express";
 import Company from "../models/Company";
 import Driver from "../models/Driver";
+import Timeline from "../models/Timeline";
 
 const router = Router();
 
@@ -8,10 +9,16 @@ const router = Router();
 router.get("/", async (req, res) => {
 	try {
 		const companies = await Company.findAll({
-			include: [{ model: Driver, as: "drivers" }],
+			include: [
+				{
+					model: Driver,
+					as: "drivers",
+					include: [{ model: Timeline, as: "timeline" }],
+				},
+			],
 		});
 		res.json(companies);
-	} catch (err) {
+	} catch {
 		res.status(500).json({ error: "Ошибка получения компаний" });
 	}
 });
@@ -22,7 +29,7 @@ router.post("/", async (req, res) => {
 		const { name, dotNumber, status } = req.body;
 		const company = await Company.create({ name, dotNumber, status });
 		res.status(201).json(company);
-	} catch (err) {
+	} catch {
 		res.status(500).json({ err: "Ошибка создания компании" });
 	}
 });
@@ -33,7 +40,7 @@ router.delete("/:id", async (req, res) => {
 		const { id } = req.params;
 		await Company.destroy({ where: { id } });
 		res.json({ message: "Компания удалена" });
-	} catch (err) {
+	} catch {
 		res.status(500).json({ error: "Ошибка удаления компании" });
 	}
 });
@@ -46,7 +53,7 @@ router.put("/:id", async (req, res) => {
 		await Company.update({ name, dotNumber, status }, { where: { id } });
 		const updated = await Company.findByPk(id);
 		res.json(updated);
-	} catch (err: unknown) {
+	} catch {
 		res.status(500).json({ error: "Ошибка обновления компании" });
 	}
 });

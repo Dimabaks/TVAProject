@@ -1,5 +1,11 @@
 import { NavLink } from "react-router-dom";
-import type { SidebarProps } from "./Sidebar.types";
+
+type SidebarProps = {
+	to: string;
+	icon: React.ReactNode;
+	label: string;
+	collapsed: boolean;
+};
 
 export default function SidebarNavItem({
 	to,
@@ -10,12 +16,15 @@ export default function SidebarNavItem({
 	return (
 		<NavLink
 			to={to}
-			className={({ isActive }) => `w-full
-				flex items-center gap-3
-				px-4 py-3
-				rounded-none
-				transition-colors
-				 ${isActive ? "bg-green-200 w-full" : "hover:bg-gray-100"}`}>
+			className={({ isActive }) =>
+				`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-sm
+                ${
+									isActive ?
+										"bg-green-50 text-green-700 font-medium"
+									:	"text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+								}
+                ${collapsed ? "justify-center" : ""}`
+			}>
 			{icon}
 			{!collapsed && <span>{label}</span>}
 		</NavLink>

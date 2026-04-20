@@ -4,6 +4,7 @@ import sequelize from "./config/database";
 import "./models/Timeline";
 import companiesRouter from "./routes/companies";
 import driversRouter from "./routes/drivers";
+import timelineRouter from "./routes/timelines";
 import "./models/User";
 import authRouter from "./routes/auth";
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api/companies", companiesRouter);
 app.use("/api/drivers", driversRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/timelines", timelineRouter);
 
 app.get("/", (req, res) => {
 	res.send("API is working");

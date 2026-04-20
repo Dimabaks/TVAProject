@@ -22,12 +22,12 @@ Timeline.init(
 			allowNull: false,
 		},
 		start: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.BIGINT,
 			allowNull: false,
 		},
 		end: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
+			type: DataTypes.BIGINT,
+			allowNull: true,
 		},
 		driverId: {
 			type: DataTypes.INTEGER,

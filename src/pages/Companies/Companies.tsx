@@ -1,8 +1,4 @@
 import CompanyItem from "../../components/Companies/CompanyItem";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import Grid3x3Icon from "@mui/icons-material/Grid3x3";
-import BadgeIcon from "@mui/icons-material/Badge";
-import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { useEffect, useState } from "react";
 import type { Company } from "../../types/Company.types";
 import { getCompanies } from "../../api/companies";
@@ -16,7 +12,7 @@ export default function Companies() {
 	const [refresh, setRefresh] = useState(0);
 
 	useEffect(() => {
-		async function fecthCompanies() {
+		async function fetchCompanies() {
 			try {
 				const res = await getCompanies();
 				setCompanies(res.data);
@@ -26,47 +22,58 @@ export default function Companies() {
 				setLoading(false);
 			}
 		}
-		fecthCompanies();
+		fetchCompanies();
 	}, [refresh]);
 
-	if (loading) return <div>Loading...</div>;
-	if (error) return <div>Error</div>;
+	if (loading)
+		return <div className="p-6 text-gray-500 text-sm">Loading...</div>;
+	if (error) return <div className="p-6 text-red-500 text-sm">{error}</div>;
+
 	return (
-		<div className="p-2 space-y-3">
-			<div className="flex items-center px-4 py-2 ">
-				<div className="grid grid-cols-4 flex-1 items-start mr-10 text-gray-600">
-					<span className="flex items-center">
-						<AccountBalanceIcon fontSize="small" className="mr-1" />
-						Company Name
-					</span>
-					<span className="flex items-center">
-						<Grid3x3Icon fontSize="small" className="mr-1" />
-						DOT Number
-					</span>
-					<span className="flex items-center">
-						<BadgeIcon fontSize="small" className="mr-1" />
-						ID
-					</span>
-					<span className="flex items-center">
-						<AutorenewIcon fontSize="small" className="mr-1" />
-						Status
-					</span>
-					<span></span>
-				</div>
+		<div className="p-6">
+			<div className="flex justify-end mb-4">
 				<button
-					className="absolute right-7 cursor-pointer border-gray-200 border-2 px-3 py-2 rounded-2xl text-gray-600 hover:bg-gray-200 "
+					className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors cursor-pointer"
 					onClick={() => setIsModalOpen(true)}>
-					Add Company
+					+ Add Company
 				</button>
 			</div>
 
-			{companies.map((company) => (
-				<CompanyItem
-					key={company.id}
-					company={company}
-					onRefresh={() => setRefresh((r) => r + 1)}
-				/>
-			))}
+			<table className="w-full border-collapse">
+				<colgroup>
+					<col style={{ width: "30%" }} />
+					<col style={{ width: "25%" }} />
+					<col style={{ width: "10%" }} />
+					<col style={{ width: "20%" }} />
+					<col style={{ width: "15%" }} />
+				</colgroup>
+				<thead>
+					<tr className="border-b border-gray-100">
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Company Name
+						</th>
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							DOT Number
+						</th>
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							ID
+						</th>
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Status
+						</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{companies.map((company) => (
+						<CompanyItem
+							key={company.id}
+							company={company}
+							onRefresh={() => setRefresh((r) => r + 1)}
+						/>
+					))}
+				</tbody>
+			</table>
 
 			<AddCompanyModal
 				open={isModalOpen}

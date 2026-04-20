@@ -1,13 +1,5 @@
 import type { Driver } from "../../types/Drivers.types";
 import { DriverRow } from "./DriverRow";
-import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import AutorenewIcon from "@mui/icons-material/Autorenew";
-import LocationPinIcon from "@mui/icons-material/LocationPin";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import WifiIcon from "@mui/icons-material/Wifi";
-import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
-import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { useState } from "react";
 import AddDriverModal from "../Modals/AddDriverModal";
 
@@ -26,46 +18,52 @@ export default function DriversList({
 		<div className="overflow-x-auto">
 			<table className="w-full border-collapse">
 				<thead>
-					<tr className="border-b border-gray-300 text-gray-600">
-						<th className="px-2 py-3 text-left">
-							<PermIdentityIcon fontSize="small" /> Driver
+					<tr className="border-b border-gray-100">
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Driver
 						</th>
-						<th className="px-2 py-3 text-left">
-							<LocalShippingIcon fontSize="small" /> Vehicle
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Vehicle
 						</th>
-						<th className="px-2 py-3 text-left">
-							<AutorenewIcon fontSize="small" /> Status
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Status
 						</th>
-						<th className="px-2 py-3 text-left whitespace-nowrap">
-							<LocationPinIcon fontSize="small" /> Last known location
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Location
 						</th>
-						<th className="px-2 py-3 text-left">
-							<AccessTimeIcon fontSize="small" /> Last update
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Last update
 						</th>
-						<th className="px-2 py-3 text-left">
-							<WifiIcon fontSize="small" /> Eld connect
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							ELD
 						</th>
-						<th className="px-2 py-3 text-left">
-							<PriorityHighIcon fontSize="small" /> Violations
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Violations
 						</th>
-						<th className="px-2 py-3 text-left">
-							<DoneAllIcon fontSize="small" /> Last check
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Last check
 						</th>
-						<th className="px-2 py-3">Break</th>
-						<th className="px-2 py-3">Drive</th>
-						<th className="px-2 py-3">Shift</th>
-						<th className="px-2 py-3">Cycle</th>
-
-						<th>
+						<th className="text-center px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							break
+						</th>
+						<th className="text-center px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Drive
+						</th>
+						<th className="text-center px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Shift
+						</th>
+						<th className="text-center px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Cycle
+						</th>
+						<th className="px-4 py-2 text-right">
 							<button
-								className="cursor-pointer border-gray-300 border-2 px-3 py-2 rounded-2xl text-gray-600 hover:bg-gray-200"
+								className="flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white text-xs font-medium rounded-lg hover:bg-green-700 transition-colors cursor-pointer ml-auto"
 								onClick={() => setIsModalOpen(true)}>
-								Add Driver
+								+ Add Driver
 							</button>
 						</th>
 					</tr>
 				</thead>
-
 				<tbody>
 					{drivers.map((driver) => (
 						<DriverRow key={driver.id} driver={driver} onRefresh={onRefresh} />

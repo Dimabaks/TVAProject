@@ -5,7 +5,7 @@ export default function ProtectedRoute({
 }: {
 	children: React.ReactNode;
 }) {
-	const token = localStorage.getItem("token");
+	const token = sessionStorage.getItem("token");
 
 	if (!token) {
 		return <Navigate to="/login" />;

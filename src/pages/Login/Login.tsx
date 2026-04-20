@@ -24,7 +24,7 @@ export default function Login() {
 	const onSubmit = async (data: LoginForm) => {
 		try {
 			const res = await login(data.email, data.password);
-			localStorage.setItem("token", res.data.token);
+			sessionStorage.setItem("token", res.data.token);
 			navigate("/companies");
 		} catch {
 			setAuthError("Invalid email or password");

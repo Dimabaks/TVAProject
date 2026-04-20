@@ -16,45 +16,57 @@ export default function CompanyItem({ company, onRefresh }: Props) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	return (
-		<div className="border border-gray-300 rounded-lg bg-white">
-			<div
+		<>
+			<tr
 				onClick={() => setOpen((p) => !p)}
-				className={`w-full text-left cursor-pointer hover:bg-green-200 flex items-center px-4 py-3 ${open ? "bg-green-200" : "bg-white"}`}>
-				<div className="grid grid-cols-4 gap-x-5 flex-1 items-center">
-					<span className="font-medium">{company.name}</span>
-					<span className="text-sm text-gray-500">{company.dotNumber}</span>
-					<span>{company.id}</span>
-					<span>
+				className={`border-b border-gray-100 cursor-pointer transition-colors ${open ? "bg-green-50" : "hover:bg-gray-50"}`}>
+				<td className="px-4 py-3 text-sm font-medium text-gray-900">
+					{company.name}
+				</td>
+				<td className="px-4 py-3 text-sm text-gray-500">{company.dotNumber}</td>
+				<td className="px-4 py-3 text-sm text-gray-500">{company.id}</td>
+				<td className="px-4 py-3">
+					<span
+						className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium
+                        ${
+													company.status === "Active" ?
+														"bg-green-50 text-green-700"
+													:	"bg-red-50 text-red-700"
+												}`}>
 						<span
-							className={`${company.status === "Active" ? "bg-green-400" : "bg-red-300"} px-4 py-2 rounded-2xl text-sm`}>
-							{company.status}
-						</span>
+							className={`w-1.5 h-1.5 rounded-full ${company.status === "Active" ? "bg-green-500" : "bg-red-500"}`}
+						/>
+						{company.status}
 					</span>
-				</div>
-
-				<div className="flex items-center gap-3">
-					<button
-						className="cursor-pointer w-1"
-						onClick={(e) => {
-							e.stopPropagation();
-							setIsModalOpen(true);
-						}}>
-						<DeleteIcon />
-					</button>
-					<KeyboardArrowDownIcon
-						className={`transition-transform ml-4 ${open ? "rotate-180" : ""}`}
-					/>
-				</div>
-			</div>
+				</td>
+				<td className="px-4 py-3">
+					<div className="flex items-center gap-2 justify-end">
+						<button
+							className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+							onClick={(e) => {
+								e.stopPropagation();
+								setIsModalOpen(true);
+							}}>
+							<DeleteIcon sx={{ fontSize: 16 }} />
+						</button>
+						<KeyboardArrowDownIcon
+							sx={{ fontSize: 18 }}
+							className={`text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}
+						/>
+					</div>
+				</td>
+			</tr>
 
 			{open && (
-				<div className="px-4 py-3  bg-white text-sm">
-					<DriversList
-						drivers={company.drivers}
-						companyId={company.id}
-						onRefresh={onRefresh}
-					/>
-				</div>
+				<tr>
+					<td colSpan={5} className="bg-gray-50 border-b border-gray-100 p-0">
+						<DriversList
+							drivers={company.drivers}
+							companyId={company.id}
+							onRefresh={onRefresh}
+						/>
+					</td>
+				</tr>
 			)}
 
 			<DeleteConfirmModal
@@ -65,8 +77,8 @@ export default function CompanyItem({ company, onRefresh }: Props) {
 					onRefresh();
 					setIsModalOpen(false);
 				}}
-				message={`Are you sure that you want to delete company ${company.name}`}
+				message={`Are you sure that you want to delete company ${company.name}?`}
 			/>
-		</div>
+		</>
 	);
 }

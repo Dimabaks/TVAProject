@@ -1,4 +1,5 @@
 import type { LogStatus, LogTimeline } from "../types/Log.types";
+import getDayWindow from "../utils/timeline";
 
 type Props = {
 	timeline: LogTimeline[];
@@ -31,13 +32,7 @@ const GRID_BG =
 	"repeating-linear-gradient(to right, rgba(0,0,0,0.14) 0, rgba(0,0,0,0.14) 1px, transparent 1px, transparent calc(100%/24))," +
 	"repeating-linear-gradient(to bottom, rgba(0,0,0,0.10) 0, rgba(0,0,0,0.10) 1px, transparent 1px, transparent calc(100%/4))";
 
-function getDayWindow(date: Date) {
-	const start = new Date(date);
-	start.setHours(0, 0, 0, 0);
-	const end = new Date(start);
-	end.setDate(end.getDate() + 1);
-	return { startMs: start.getTime(), endMs: end.getTime() };
-}
+const now = Date.now();
 
 export default function DriverGraphic({ timeline, date }: Props) {
 	const { startMs, endMs } = getDayWindow(date);
@@ -46,7 +41,10 @@ export default function DriverGraphic({ timeline, date }: Props) {
 	const parts = timeline
 		.map((seg) => {
 			const clippedStart = Math.max(seg.start, startMs);
-			const clippedEnd = Math.min(seg.end, endMs);
+			const clippedEnd =
+				seg.end === null ?
+					Math.min(now, endMs)
+				:	Math.min(Number(seg.end), endMs);
 			const duration = clippedEnd - clippedStart;
 			if (duration <= 0) return null;
 
@@ -62,7 +60,7 @@ export default function DriverGraphic({ timeline, date }: Props) {
 			};
 		})
 		.filter(Boolean) as {
-		id: string;
+		id: number;
 		status: LogStatus;
 		row: number;
 		left: number;

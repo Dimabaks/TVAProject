@@ -1,26 +1,21 @@
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import TimerIcon from "@mui/icons-material/Timer";
-import EventIcon from "@mui/icons-material/Event";
-import AutorenewIcon from "@mui/icons-material/Autorenew";
-import LocationPinIcon from "@mui/icons-material/LocationPin";
-import ElectricCarIcon from "@mui/icons-material/ElectricCar";
-import EngineeringOutlinedIcon from "@mui/icons-material/EngineeringOutlined";
-import SpeakerNotesOutlinedIcon from "@mui/icons-material/SpeakerNotesOutlined";
-import BadgeIcon from "@mui/icons-material/Badge";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import type { LogTimeline } from "../../types/Log.types";
 import type { Driver } from "../../types/Drivers.types";
+import getDayWindow from "../../utils/timeline";
 
 type Props = {
 	driver: Driver;
 	timeline: LogTimeline[];
-	selectedIds: string[];
-	onToggleSelected: (id: string) => void;
-	onDeleteOne: (id: string) => void;
+	selectedIds: number[];
+	onToggleSelected: (id: number) => void;
+	onDeleteOne: (id: number) => void;
 	onToggleSelectedAll: () => void;
-	onOpenModal: (id: string) => void;
+	onOpenModal: (id: number) => void;
+	date: Date;
 };
+
+const now = Date.now();
 
 export default function TimelineEditor({
 	driver,
@@ -30,24 +25,34 @@ export default function TimelineEditor({
 	onDeleteOne,
 	onToggleSelectedAll,
 	onOpenModal,
+	date,
 }: Props) {
 	function formatMinutes(ms: number) {
 		const totalMinutes = Math.floor(ms / 60000);
-		const hours = Math.floor(totalMinutes / 60); //130 / 60 = 2
-		const minutes = totalMinutes % 60; // 70 % 60 = 10 так как 70 / 60 = 1 70-60 = 10
-
-		const hh = String(hours).padStart(2, "0");
-		const mm = String(minutes).padStart(2, "0");
-
-		return `${hh}h ${mm}m`;
+		const hours = Math.floor(totalMinutes / 60);
+		const minutes = totalMinutes % 60;
+		return `${String(hours).padStart(2, "0")}h ${String(minutes).padStart(2, "0")}m`;
 	}
 
+	const statusColors: Record<string, string> = {
+		driving: "bg-green-50 text-green-700",
+		"on duty": "bg-amber-50 text-amber-700",
+		break: "bg-orange-50 text-orange-700",
+		"off duty": "bg-gray-100 text-gray-600",
+	};
+
+	const { startMs, endMs } = getDayWindow(date);
+	const filteredTimeline = timeline.filter((seg) => {
+		const segEnd = seg.end ?? now;
+		return seg.start < endMs && segEnd > startMs;
+	});
+
 	return (
-		<div>
-			<table className="w-full text-sm border-collapse border-spacing-y-2">
-				<thead className="">
-					<tr className="">
-						<th className="px-2 py-1 ">
+		<div className="border-t border-gray-100">
+			<table className="w-full border-collapse text-sm">
+				<thead>
+					<tr className="border-b border-gray-100">
+						<th className="px-4 py-2 w-8">
 							<input
 								type="checkbox"
 								checked={
@@ -57,52 +62,45 @@ export default function TimelineEditor({
 								onChange={onToggleSelectedAll}
 							/>
 						</th>
-						<th className="px-2 py-1">
-							<AccessTimeIcon fontSize="small" />
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
 							Time
 						</th>
-						<th className="px-2 py-1">
-							<TimerIcon fontSize="small" />
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
 							Duration
 						</th>
-						<th className="px-2 py-1">
-							<EventIcon fontSize="small" />
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
 							Event
 						</th>
-						<th className="px-2 py-1">
-							<AutorenewIcon fontSize="small" />
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
 							Status
 						</th>
-						<th className="px-2 py-1">
-							<LocationPinIcon fontSize="small" />
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
 							Location
 						</th>
-						<th className="px-2 py-1">
-							<ElectricCarIcon fontSize="small" />
-							Odometr
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Odometer
 						</th>
-						<th className="px-2 py-1">
-							<EngineeringOutlinedIcon fontSize="small" />
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
 							Engine
 						</th>
-						<th className="px-2 py-1">
-							<SpeakerNotesOutlinedIcon fontSize="small" />
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
 							Notes
 						</th>
-						<th className="px-2 py-1">Origin</th>
-						<th className="px-2 py-1">
-							<BadgeIcon fontSize="small" />
-							Id
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							Origin
 						</th>
-						<th className="w-24 px-2 py-1">Actions</th>
+						<th className="text-left px-4 py-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
+							ID
+						</th>
+						<th className="px-4 py-2 w-20"></th>
 					</tr>
 				</thead>
-				<tbody className="w-full text-center">
-					{timeline.map((seg) => (
+				<tbody>
+					{filteredTimeline.map((seg) => (
 						<tr
 							key={seg.id}
-							className={`border-b border-gray-300 ${selectedIds.includes(seg.id) ? "bg-green-100" : ""}`}>
-							<td className="px-2 py-3">
+							className={`border-b border-gray-100 transition-colors ${selectedIds.includes(seg.id) ? "bg-green-50" : "hover:bg-gray-50"}`}>
+							<td className="px-4 py-3">
 								<input
 									type="checkbox"
 									className="cursor-pointer"
@@ -110,31 +108,38 @@ export default function TimelineEditor({
 									onChange={() => onToggleSelected(seg.id)}
 								/>
 							</td>
-							<td className="px-2 py-3">{`${new Date(seg.start).toLocaleString()}`}</td>
-							<td className="px-2 py-3">
+							<td className="px-4 py-3 text-gray-900">
+								{new Date(seg.start).toLocaleString()}
+							</td>
+							<td className="px-4 py-3 text-gray-500">
 								{formatMinutes(seg.end - seg.start)}
 							</td>
-							<td className="px-2 py-3">{seg.status}</td>
-							<td className="px-2 py-3">{driver.connection}</td>
-							<td className="px-2 py-3">{driver.lastLocation}</td>
-							<td className="px-2 py-3">-</td>
-							<td className="px-2 py-3">-</td>
-							<td className="px-2 py-3">-</td>
-							<td className="px-2 py-3">-</td>
-							<td className="px-2 py-3">{driver.id}</td>
-							<td className="w-24 px-2 py-3">
-								<div className="flex gap-1 justify-center">
+							<td className="px-4 py-3">
+								<span
+									className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[seg.status] || "bg-gray-100 text-gray-600"}`}>
+									{seg.status}
+								</span>
+							</td>
+							<td className="px-4 py-3 text-gray-500">{driver.connection}</td>
+							<td className="px-4 py-3 text-gray-500">
+								{driver.lastLocation || "—"}
+							</td>
+							<td className="px-4 py-3 text-gray-400">—</td>
+							<td className="px-4 py-3 text-gray-400">—</td>
+							<td className="px-4 py-3 text-gray-400">—</td>
+							<td className="px-4 py-3 text-gray-400">—</td>
+							<td className="px-4 py-3 text-gray-500">{driver.id}</td>
+							<td className="px-4 py-3">
+								<div className="flex items-center gap-1 justify-end">
 									<button
-										className="cursor-pointer"
-										type="button"
+										className="p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors cursor-pointer"
 										onClick={() => onOpenModal(seg.id)}>
-										<EditOutlinedIcon className="text-green-500" />
+										<EditOutlinedIcon sx={{ fontSize: 16 }} />
 									</button>
 									<button
-										className="cursor-pointer"
-										type="button"
+										className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
 										onClick={() => onDeleteOne(seg.id)}>
-										<DeleteOutlineOutlinedIcon className="text-red-500" />
+										<DeleteOutlineOutlinedIcon sx={{ fontSize: 16 }} />
 									</button>
 								</div>
 							</td>

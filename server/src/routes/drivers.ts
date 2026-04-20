@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
 			include: [{ model: Timeline, as: "timeline" }],
 		});
 		res.json(drivers);
-	} catch (err: unknown) {
+	} catch {
 		res.status(500).json({ error: "Ошибка получения водителей" });
 	}
 });
@@ -58,8 +58,8 @@ router.post("/", async (req, res) => {
 			companyId,
 		});
 		res.status(201).json(driver);
-	} catch (err: unknown) {
-		res.status(500).json({ error: "Ошибка создания водителя" });
+	} catch {
+		res.status(500).json({ error: "Error driver loading" });
 	}
 });
 
@@ -92,8 +92,8 @@ router.put("/:id", async (req, res) => {
 			include: [{ model: Timeline, as: "timeline" }],
 		});
 		res.json(updated);
-	} catch (err: unknown) {
-		res.status(500).json({ error: "Ошибка обновления водителя" });
+	} catch {
+		res.status(500).json({ error: "Error driver update" });
 	}
 });
 
@@ -102,9 +102,9 @@ router.delete("/:id", async (req, res) => {
 	try {
 		const { id } = req.params;
 		await Driver.destroy({ where: { id } });
-		res.json({ message: "Водитель удалён" });
-	} catch (err: unknown) {
-		res.status(500).json({ error: "Ошибка удаления водителя" });
+		res.json({ message: "Driver was deleted" });
+	} catch {
+		res.status(500).json({ error: "Error driver delete" });
 	}
 });
 

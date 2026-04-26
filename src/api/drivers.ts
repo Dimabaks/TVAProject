@@ -20,3 +20,7 @@ export const updateDriver = (id: number, data: CreateDriverData) =>
 export const deleteDriver = (id: number) => api.delete(`/drivers/${id}`);
 export const getDriverById = (id: number) => api.get(`/drivers/${id}`);
 export const deleteTimeline = (id: number) => api.delete(`/timelines/${id}`);
+export const updateTimeline = (
+	id: number,
+	data: { status: string; start: number },
+) => api.put(`/timelines/${id}`, data);

@@ -183,7 +183,16 @@ export function DriverDetails() {
 				</button>
 			</div>
 
-			{editingSeg && <EditModal seg={editingSeg} onClose={closeEdit} />}
+			{editingSeg && (
+				<EditModal
+					seg={editingSeg}
+					onSuccess={() => {
+						setRefresh((r) => r + 1);
+						closeEdit();
+					}}
+					onClose={closeEdit}
+				/>
+			)}
 		</div>
 	);
 }
